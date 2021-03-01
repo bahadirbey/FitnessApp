@@ -60,7 +60,8 @@ public class SignInActivity extends AppCompatActivity {
         if(!email.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()){
             if(!pass.isEmpty()){
                 if (mAuth.getCurrentUser() != null){
-                    Toast.makeText(SignInActivity.this, "Login Successfully 1", Toast.LENGTH_SHORT).show();
+                    InfoActivity.email = email;
+                    Toast.makeText(SignInActivity.this, "Login Successfully!", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(SignInActivity.this, HomeActivity.class));
                     finish();
                 }else{
