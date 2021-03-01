@@ -2,4 +2,8 @@
     <string name="app_name">FitnessApp</string>
     <string name="sign_up">SIGN UP</string>
     <string name="sign_in">SIGN IN</string>
+    <string name="enter_your_weight">Enter Your Weight</string>
+    <string name="log_out">Log Out</string>
+    <string name="enter_your_height">Enter Your Height</string>
+    <string name="save">SAVE</string>
 </resources>
