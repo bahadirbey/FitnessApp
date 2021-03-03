@@ -6,4 +6,7 @@
     <string name="log_out">Log Out</string>
     <string name="enter_your_height">Enter Your Height</string>
     <string name="save">SAVE</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>
