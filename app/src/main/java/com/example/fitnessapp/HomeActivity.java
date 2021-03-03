@@ -51,11 +51,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
 
-        //+readBtn = findViewById(R.id.read_btn);
+        //readBtn = findViewById(R.id.read_btn);
         //welcome_text = findViewById(R.id.welcome_text);
-
-        drawerLayout = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.nav_view);
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("users");
         String mail = InfoActivity.email.replace("@","").replace(".","");
@@ -78,6 +75,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         //        });
         //    }
         //});
+
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
 
         navigationView.bringToFront();
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -105,9 +105,21 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()){
             case R.id.nav_home:
                 break;
-            case R.id.nav_profile:
-                Intent intent = new Intent(HomeActivity.this, Exercises.class);
-                startActivity(intent);
+            case R.id.nav_workout:
+                Intent intent_workout = new Intent(HomeActivity.this, WorkoutActivity.class);
+                startActivity(intent_workout);
+                break;
+            case R.id.nav_diet:
+                Intent intent_diet = new Intent(HomeActivity.this, DietActivity.class);
+                startActivity(intent_diet);
+                break;
+            case R.id.nav_cardio:
+                Intent intent_cardio = new Intent(HomeActivity.this, CardioActivity.class);
+                startActivity(intent_cardio);
+                break;
+            case R.id.nav_logout:
+                Intent intent_logout = new Intent(HomeActivity.this, SignInActivity.class);
+                startActivity(intent_logout);
                 break;
         }
 

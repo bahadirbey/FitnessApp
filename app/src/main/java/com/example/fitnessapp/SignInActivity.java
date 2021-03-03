@@ -18,6 +18,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -41,7 +46,7 @@ public class SignInActivity extends AppCompatActivity {
         mTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SignInActivity.this, MainActivity.class));
+                startActivity(new Intent(SignInActivity.this, SignUpActivity.class));
             }
         });
 
@@ -62,8 +67,26 @@ public class SignInActivity extends AppCompatActivity {
                 if (mAuth.getCurrentUser() != null){
                     InfoActivity.email = email;
                     Toast.makeText(SignInActivity.this, "Login Successfully!", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(SignInActivity.this, HomeActivity.class));
-                    finish();
+
+                    DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("users");
+                    String mail = email.replace("@","").replace(".","");
+
+                    reference.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if(snapshot.child(mail).exists()){
+                                startActivity(new Intent(SignInActivity.this, HomeActivity.class));
+                                finish();
+                            }else{
+                                startActivity(new Intent(SignInActivity.this, InfoActivity.class));
+                                finish();
+                            }
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
                 }else{
                     Toast.makeText(SignInActivity.this, "Cannot Log In!", Toast.LENGTH_SHORT).show();
                 }

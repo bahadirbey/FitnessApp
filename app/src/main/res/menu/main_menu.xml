@@ -2,36 +2,32 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
+
         <item
             android:id="@+id/nav_home"
             android:title="Home"
             android:icon="@drawable/ic_home"/>
+
+        <item
+            android:id="@+id/nav_workout"
+            android:title="Workout"
+            android:icon="@drawable/ic_workout"/>
+
+        <item
+            android:id="@+id/nav_diet"
+            android:title="Diet"
+            android:icon="@drawable/ic_diet"/>
+
+        <item
+            android:id="@+id/nav_cardio"
+            android:title="Cardio"
+            android:icon="@drawable/ic_cardio"/>
+
+        <item
+            android:id="@+id/nav_logout"
+            android:title="Logout"
+            android:icon="@drawable/ic_logout"/>
+
     </group>
 
-    <item
-        android:title="Profile">
-
-        <menu>
-            <group android:checkableBehavior="single">
-                <item
-                    android:id="@+id/nav_profile"
-                    android:title="Home"
-                    android:icon="@drawable/ic_logout"/>
-            </group>
-
-        </menu>
-    </item>
-
-
-    <item
-        android:title="Communicate">
-        <menu>
-            <group android:checkableBehavior="single">
-                <item
-                    android:id="@+id/nav_logout"
-                    android:title="Home"
-                    android:icon="@drawable/ic_logout"/>
-            </group>
-        </menu>
-    </item>
 </menu>

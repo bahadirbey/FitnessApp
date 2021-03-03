@@ -20,7 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.regex.Pattern;
 
-public class MainActivity extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity {
 
     private EditText mEmail, mPass;
     private TextView mTextView;
@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_sign_up);
 
         mEmail = findViewById(R.id.email_reg);
         mPass = findViewById(R.id.pass_reg);
@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         mTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, SignInActivity.class));
+                startActivity(new Intent(SignUpActivity.this, SignInActivity.class));
             }
         });
 
@@ -63,17 +63,17 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()){
-                            Toast.makeText(MainActivity.this, "Registered Successfully!", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(MainActivity.this, SignInActivity.class));
+                            Toast.makeText(SignUpActivity.this, "Registered Successfully!", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(SignUpActivity.this, SignInActivity.class));
                             finish();
                         }else{
-                            Toast.makeText(MainActivity.this, "An Error Occured!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignUpActivity.this, "An Error Occured!", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(MainActivity.this, "Something Went Wrong!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SignUpActivity.this, "Something Went Wrong!", Toast.LENGTH_SHORT).show();
                     }
                 });
             }else{

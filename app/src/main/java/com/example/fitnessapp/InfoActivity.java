@@ -19,12 +19,11 @@ public class InfoActivity extends AppCompatActivity {
 
     public static String email;
 
-    private Button signoutBtn;
+    private Button signoutBtn, savebtn;
     private FirebaseAuth mAuth;
 
     TextView mail_text;
     EditText mHeight, mWeight, mName;
-    Button savebtn;
 
     DatabaseReference reference;
     Member member;
@@ -58,8 +57,9 @@ public class InfoActivity extends AppCompatActivity {
                 int height = Integer.parseInt(mHeight.getText().toString().trim());
                 int weight = Integer.parseInt(mWeight.getText().toString().trim());
                 String mails = mail_text.getText().toString().trim();
+
                 member = new Member(name, email, height, weight);
-                reference.child(mails).setValue(member);
+                reference.child(mails).child("info").setValue(member);
 
                 Toast.makeText(InfoActivity.this,"Your information is saved successfully!", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(InfoActivity.this, HomeActivity.class));
