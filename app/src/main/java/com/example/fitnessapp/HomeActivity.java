@@ -37,9 +37,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     FirebaseAuth auth;
     FirebaseUser user;
 
-    private TextView welcome_text;
-    private Button readBtn;
-
     DrawerLayout drawerLayout;
     NavigationView navigationView;
 
@@ -51,30 +48,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
 
-        //readBtn = findViewById(R.id.read_btn);
-        //welcome_text = findViewById(R.id.welcome_text);
-
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("users");
         String mail = InfoActivity.email.replace("@","").replace(".","");
         Toast.makeText(HomeActivity.this,mail,Toast.LENGTH_SHORT).show();
-
-        //readBtn.setOnClickListener(new View.OnClickListener() {
-        //    @Override
-        //    public void onClick(View v) {
-        //        reference.addValueEventListener(new ValueEventListener() {
-        //            @Override
-        //            public void onDataChange(DataSnapshot dataSnapshot) {
-        //                String mail = InfoActivity.email.replace("@","").replace(".","");
-        //                String name = dataSnapshot.child(mail).child("name").getValue().toString();
-        //                welcome_text.setText(name);
-        //            }
-
-        //            @Override
-        //            public void onCancelled(@NonNull DatabaseError error) {
-        //            }
-        //        });
-        //    }
-        //});
 
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
