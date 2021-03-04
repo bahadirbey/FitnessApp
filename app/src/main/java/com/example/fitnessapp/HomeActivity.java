@@ -13,12 +13,14 @@ import androidx.viewpager.widget.ViewPager;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,6 +51,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     ViewPager pager;
     PagerAdapter pagerAdapter;
+    private TextView[] mDots;
+    private SlidePagerAdapter slidePagerAdapter;
+
+    LinearLayout mDotsLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +68,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         String mail = InfoActivity.email.replace("@","").replace(".","");
         Toast.makeText(HomeActivity.this,mail,Toast.LENGTH_SHORT).show();
 
+        //Drawer
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
 
@@ -76,7 +83,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         Menu menu = navigationView.getMenu();
         menu.findItem(R.id.nav_logout).setVisible(false);
 
-
+        //Fragments
         List<Fragment> list = new ArrayList<>();
         list.add(new PageFragment1());
         list.add(new PageFragment2());
@@ -86,6 +93,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         pagerAdapter = new SlidePagerAdapter(getSupportFragmentManager(), list);
 
         pager.setAdapter(pagerAdapter);
+
+        mDotsLayout = findViewById(R.id.dots_layout);
+        addDotsIndicator(0);
+
+       pager.addOnPageChangeListener(viewListener);
     }
 
     public void onBackPressed(){
@@ -123,4 +135,39 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    public void addDotsIndicator(int position){
+        mDots = new TextView[3];
+        mDotsLayout.removeAllViews();
+
+        for(int i=0; i<mDots.length; i++){
+            mDots[i] = new TextView(this);
+            mDots[i].setText(Html.fromHtml("&#8226;"));
+            mDots[i].setTextSize(35);
+            mDots[i].setTextColor(getResources().getColor(R.color.purple_200));
+
+            mDotsLayout.addView(mDots[i]);
+        }
+
+        if(mDots.length > 0){
+            mDots[position].setTextColor(getResources().getColor(R.color.purple_500));
+        }
+    }
+
+    ViewPager.OnPageChangeListener viewListener = new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            addDotsIndicator(position);
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
+    };
 }
