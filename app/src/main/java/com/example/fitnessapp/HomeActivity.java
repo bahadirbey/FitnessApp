@@ -1,7 +1,6 @@
 package com.example.fitnessapp;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
@@ -11,32 +10,22 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
-import com.example.fitnessapp.fragments.PageFragment1;
-import com.example.fitnessapp.fragments.PageFragment2;
-import com.example.fitnessapp.fragments.PageFragment3;
+import com.example.fitnessapp.fragments.home.PageFragment1;
+import com.example.fitnessapp.fragments.home.PageFragment2;
+import com.example.fitnessapp.fragments.home.PageFragment3;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +41,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     ViewPager pager;
     PagerAdapter pagerAdapter;
     private TextView[] mDots;
-    private SlidePagerAdapter slidePagerAdapter;
 
     LinearLayout mDotsLayout;
 
@@ -89,12 +77,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         list.add(new PageFragment2());
         list.add(new PageFragment3());
 
-        pager = findViewById(R.id.pager);
+        pager = findViewById(R.id.pager_home);
         pagerAdapter = new SlidePagerAdapter(getSupportFragmentManager(), list);
 
         pager.setAdapter(pagerAdapter);
 
-        mDotsLayout = findViewById(R.id.dots_layout);
+        mDotsLayout = findViewById(R.id.dots_layout_home);
         addDotsIndicator(0);
 
        pager.addOnPageChangeListener(viewListener);
