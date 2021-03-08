@@ -10,23 +10,37 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
+import android.content.res.Resources;
+import android.icu.text.IDNA;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Debug;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.example.fitnessapp.fragments.workout.Workout_PageFragment1;
 import com.example.fitnessapp.fragments.workout.Workout_PageFragment2;
 import com.example.fitnessapp.fragments.workout.Workout_PageFragment3;
 import com.example.fitnessapp.fragments.workout.Workout_PageFragment4;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class WorkoutActivity extends AppCompatActivity {
+public class WorkoutActivity extends AppCompatActivity{
 
     DrawerLayout drawerLayout;
     NavigationView navigationView;
@@ -36,6 +50,11 @@ public class WorkoutActivity extends AppCompatActivity {
     private TextView[] mDots;
 
     LinearLayout mDotsLayout;
+
+    VideoView videoView;
+    String videoPath;
+    String videoNum;
+    Button btnVideoSetter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +91,18 @@ public class WorkoutActivity extends AppCompatActivity {
         addDotsIndicator(0);
 
         pager.addOnPageChangeListener(viewListener);
+
+        //Videos
+
+        btnVideoSetter = findViewById(R.id.btn_videosetter);
+
+        videoNum = "2131689472";
+        videoView = findViewById(R.id.video_view);
+        videoPath = "android.resource://" + getPackageName() + "/" + videoNum;
+
+        setVideo(videoPath);
+
+        //Toast.makeText(WorkoutActivity.this,  "R.raw.video : " + R.raw.video_two, Toast.LENGTH_SHORT).show();
     }
 
     public void onBackPressed(){
@@ -139,4 +170,40 @@ public class WorkoutActivity extends AppCompatActivity {
         @Override
         public void onPageScrollStateChanged(int state) {}
     };
+
+    public void setVideoPath(View view){
+        switch (view.getId()){
+            case R.id.btn_videosetter:
+                getDatabasebReference("1");
+                videoPath = "android.resource://" + getPackageName() + "/" + videoNum;
+                setVideo(videoPath);
+                break;
+        }
+    }
+
+    public void setVideo(String videoPath){
+        Uri uri = Uri.parse(videoPath);
+        videoView.setVideoURI(uri);
+
+        MediaController mediaController = new MediaController(this);
+        videoView.setMediaController(mediaController);
+        mediaController.setAnchorView(videoView);
+    }
+
+    public void getDatabasebReference(String child){
+        String mail = InfoActivity.email.replace("@","").replace(".","");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("users").child(mail).child("plan");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                videoNum = snapshot.child(child).getValue().toString();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
 }
