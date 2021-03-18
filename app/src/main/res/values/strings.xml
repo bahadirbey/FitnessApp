@@ -7,6 +7,12 @@
     <string name="enter_your_height">Enter Your Height</string>
     <string name="save">SAVE</string>
 
+    <string-array name="workoutplans">
+        <item>I want to be stronger</item>
+        <item>I want to be fit</item>
+        <item>I want to maintain my weight</item>
+    </string-array>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>

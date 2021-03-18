@@ -1,6 +1,7 @@
 package com.example.fitnessapp;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
@@ -9,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.icu.text.IDNA;
@@ -16,11 +18,17 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Debug;
 import android.text.Html;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,6 +63,14 @@ public class WorkoutActivity extends AppCompatActivity{
     String videoPath;
     String videoNum;
     Button btnVideoSetter;
+    String plan;
+
+    ListView listView;
+    String mainTitle[] = {"FirstDay", "1", "2", "3", "4", "5", "6", "7", "8"};
+    String subTitle[] = {"", "1", "2", "3", "4", "5", "6", "7", "8"};
+
+    String myPlanTitle[];
+    String myPlanDes[];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,13 +112,34 @@ public class WorkoutActivity extends AppCompatActivity{
 
         btnVideoSetter = findViewById(R.id.btn_videosetter);
 
-        videoNum = "2131689472";
+        videoNum = "2131689473";
         videoView = findViewById(R.id.video_view);
         videoPath = "android.resource://" + getPackageName() + "/" + videoNum;
 
         setVideo(videoPath);
 
-        //Toast.makeText(WorkoutActivity.this,  "R.raw.video : " + R.raw.video_two, Toast.LENGTH_SHORT).show();
+        myPlanTitle = mainTitle;
+        myPlanDes = subTitle;
+
+        if(InfoActivity.workoutPlan.equals("power")){
+
+        }
+
+        //Toast.makeText(WorkoutActivity.this,  "R.raw.video : " + R.raw.barbell_row, Toast.LENGTH_SHORT).show();
+
+        listView = findViewById(R.id.list_item);
+        ListAdapter adapter = new ListAdapter(this, myPlanTitle, myPlanDes);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(!myPlanTitle[position].contains("Day")){
+                    getDatabaseReference(myPlanTitle[position]);
+                    videoPath = "android.resource://" + getPackageName() + "/" + videoNum;
+                    setVideo(videoPath);
+                }
+            }
+        });
     }
 
     public void onBackPressed(){
@@ -171,16 +208,6 @@ public class WorkoutActivity extends AppCompatActivity{
         public void onPageScrollStateChanged(int state) {}
     };
 
-    public void setVideoPath(View view){
-        switch (view.getId()){
-            case R.id.btn_videosetter:
-                getDatabasebReference("1");
-                videoPath = "android.resource://" + getPackageName() + "/" + videoNum;
-                setVideo(videoPath);
-                break;
-        }
-    }
-
     public void setVideo(String videoPath){
         Uri uri = Uri.parse(videoPath);
         videoView.setVideoURI(uri);
@@ -190,13 +217,13 @@ public class WorkoutActivity extends AppCompatActivity{
         mediaController.setAnchorView(videoView);
     }
 
-    public void getDatabasebReference(String child){
+    public void getDatabaseReference(String child){
         String mail = InfoActivity.email.replace("@","").replace(".","");
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("users").child(mail).child("plan");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("users").child(mail).child("workout");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                videoNum = snapshot.child(child).getValue().toString();
+                    videoNum = snapshot.child(child).getValue().toString();
             }
 
             @Override
@@ -206,4 +233,31 @@ public class WorkoutActivity extends AppCompatActivity{
         });
     }
 
+    class ListAdapter extends ArrayAdapter<String>{
+
+        Context context;
+        String rTitle[];
+        String rDes[];
+
+        ListAdapter(Context context, String title[], String des[]){
+            super(context, R.layout.row, R.id.mainText, title);
+            this.context = context;
+            this.rTitle = title;
+            this.rDes = des;
+        }
+
+        @NonNull
+        @Override
+        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View view = inflater.inflate(R.layout.row, parent, false);
+            TextView title = view.findViewById(R.id.mainText);
+            TextView des = view.findViewById(R.id.subText);
+
+            title.setText(rTitle[position]);
+            des.setText(rDes[position]);
+
+            return view;
+        }
+    }
 }

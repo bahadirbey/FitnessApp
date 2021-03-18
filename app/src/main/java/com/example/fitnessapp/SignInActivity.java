@@ -76,6 +76,7 @@ public class SignInActivity extends AppCompatActivity {
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if(snapshot.child(mail).exists()){
                                 startActivity(new Intent(SignInActivity.this, HomeActivity.class));
+                                getDatabaseReferencePlan();
                                 finish();
                             }else{
                                 startActivity(new Intent(SignInActivity.this, InfoActivity.class));
@@ -96,5 +97,25 @@ public class SignInActivity extends AppCompatActivity {
         }else if(email.isEmpty()){
             mEmail.setError("Please Enter Correct Email!");
         }
+    }
+
+    public void getDatabaseReferencePlan(){
+        String mail = InfoActivity.email.replace("@","").replace(".","");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("users").child(mail).child("workout");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.child("plan").exists()){
+                    InfoActivity.workoutPlan = snapshot.child("plan").getValue().toString();
+                }else{
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }

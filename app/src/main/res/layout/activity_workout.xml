@@ -36,10 +36,20 @@
                 android:layout_height="wrap_content" />
         </FrameLayout>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="300dp">
+
+            <ListView
+                android:id="@+id/list_item"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </RelativeLayout>
+
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/pager_workout"
             android:layout_width="match_parent"
-            android:layout_height="440dp"
+            android:layout_height="40dp"
             android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp"/>
 
@@ -54,6 +64,5 @@
         </LinearLayout>
 
     </LinearLayout>
-
 
 </androidx.drawerlayout.widget.DrawerLayout>
