@@ -24,20 +24,22 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <RelativeLayout
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="500dp">
+
+            <ListView
+                android:id="@+id/list_diet_item"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </RelativeLayout>
+
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/pager_diet"
             android:layout_width="match_parent"
-            android:layout_height="680dp" />
-
-        <LinearLayout
-            android:id="@+id/dots_layout_diet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="horizontal"
-            android:textAlignment="center">
-
-        </LinearLayout>
+            android:layout_height="105dp"
+            android:layout_marginTop="20dp" />
 
     </LinearLayout>
 

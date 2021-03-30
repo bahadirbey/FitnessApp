@@ -55,22 +55,50 @@ public class WorkoutActivity extends AppCompatActivity{
 
     ViewPager pager;
     PagerAdapter pagerAdapter;
-    private TextView[] mDots;
-
-    LinearLayout mDotsLayout;
 
     VideoView videoView;
     String videoPath;
     String videoNum;
     Button btnVideoSetter;
-    String plan;
 
     ListView listView;
-    String mainTitle[] = {"FirstDay", "1", "2", "3", "4", "5", "6", "7", "8"};
-    String subTitle[] = {"", "1", "2", "3", "4", "5", "6", "7", "8"};
+
+    String mainTitle[] = {"There is no active program!"};
+    String subTitle[] = {"Make sure you have chosen your program!"};
+
+    String powerTitle[] = {"FirstDay", "Squat", "Bench Press", "Pull up", "Second Day", "Squat", "Overhead Press", "Deadlift", "Dips", "Third Day", "Squat"
+    , "Bench Press", "Barbell Row"};
+    String powerSubTitle[] = {"", "5x5", "5x5", "5x5", "", "5x5", "5x5", "1x5", "5x5", "", "5x5", "5x5", "5x5"};
+    int powerVideoNums[] = {0, R.raw.squat, R.raw.bench_press, R.raw.pull_up, 0, R.raw.squat, R.raw.ohp, R.raw.deadlift, R.raw.dips, 0, R.raw.squat, R.raw.bench_press,
+    R.raw.barbell_row};
+
+    String maintainTitle[] = {"First Day", "Bench Press", "Incline Bench Press", "Machine Flies", "Dumbbell Incline Press",
+    "Second Day", "Pull up", "Lat Pulldown", "Barbell Row", "Deadlift",
+    "Third Day", "Overhead Press", "Dumbbell Shoulder Press", "Lateral Raises", "Front Raises",
+    "Fourth Day", "Barbell Biceps Curl", "Dumbbell Curl", "Cable Triceps Extension", "Push up",
+    "Fifth Day", "Squat", "Lunges", "Machine Leg Curl", "Machine Calf Raises"};
+    String maintainSubTitle[] = {"", "4x12", "4x8", "3x15", "4x10", "", "4xMax", "4x12", "3x15", "3x10", "", "4x10", "3x15", "3x20", "3x20",
+            "", "4x20", "3x15", "4x20", "3xMax", "4x8", "3x15", "4x12", "3x20"};
+
+    int maintainVideoNums[] = {0, R.raw.bench_press, R.raw.incline_bench_press, R.raw.machine_fly, R.raw.incline_dumbbell_press,
+            0, R.raw.pull_up, R.raw.lat_pulldown, R.raw.barbell_row, R.raw.deadlift,
+            0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0};
+
+
+    String fitTitle[] ={"First Day", "Bench Press", "Barbell Row", "Machine Fly", "Dumbbell Row",
+            "Second Day", "Squat", "Machine Leg Curl", "Machine Calf Raises", "Lunges",
+            "Third Day", "Triceps Pushdown", "Dumbbell Curls", "Lateral Raises", "Dumbbell Shoulder Press"};
+    String fitSubTitle[] = {"", "10x10", "10x10", "3x12", "3x12", "", "10x10", "10x10", "3x10", "3x10", "", "10x10", "10x10", "4x12", "4x12"};
+
+    int fitVideoNums[] = {0, R.raw.bench_press, R.raw.barbell_row, R.raw.machine_fly, R.raw.barbell_row,
+    0, R.raw.squat, R.raw.squat, R.raw.squat, R.raw.squat,
+    0, 0, 0, 0, 0};
 
     String myPlanTitle[];
     String myPlanDes[];
+    int myPlanVideos[];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,16 +131,13 @@ public class WorkoutActivity extends AppCompatActivity{
 
         pager.setAdapter(pagerAdapter);
 
-        mDotsLayout = findViewById(R.id.dots_layout_workout);
-        addDotsIndicator(0);
-
         pager.addOnPageChangeListener(viewListener);
 
         //Videos
 
         btnVideoSetter = findViewById(R.id.btn_videosetter);
 
-        videoNum = "2131689473";
+        videoNum = String.valueOf(R.raw.trailer);
         videoView = findViewById(R.id.video_view);
         videoPath = "android.resource://" + getPackageName() + "/" + videoNum;
 
@@ -121,11 +146,25 @@ public class WorkoutActivity extends AppCompatActivity{
         myPlanTitle = mainTitle;
         myPlanDes = subTitle;
 
-        if(InfoActivity.workoutPlan.equals("power")){
-
+        if(InfoActivity.workout_plan.equals("power")){
+            myPlanTitle = powerTitle;
+            myPlanDes = powerSubTitle;
+            myPlanVideos = powerVideoNums;
         }
 
-        //Toast.makeText(WorkoutActivity.this,  "R.raw.video : " + R.raw.barbell_row, Toast.LENGTH_SHORT).show();
+        if(InfoActivity.workout_plan.equals("fit")){
+            myPlanTitle = fitTitle;
+            myPlanDes = fitSubTitle;
+            myPlanVideos = fitVideoNums;
+        }
+
+        if (InfoActivity.workout_plan.equals("maintain")){
+            myPlanTitle = mainTitle;
+            myPlanDes = maintainSubTitle;
+            myPlanVideos = maintainVideoNums;
+        }
+
+        Toast.makeText(WorkoutActivity.this,  "R.raw.video : " + R.raw.barbell_row, Toast.LENGTH_SHORT).show();
 
         listView = findViewById(R.id.list_item);
         ListAdapter adapter = new ListAdapter(this, myPlanTitle, myPlanDes);
@@ -134,7 +173,7 @@ public class WorkoutActivity extends AppCompatActivity{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(!myPlanTitle[position].contains("Day")){
-                    getDatabaseReference(myPlanTitle[position]);
+                    videoNum = String.valueOf(myPlanVideos[position]);
                     videoPath = "android.resource://" + getPackageName() + "/" + videoNum;
                     setVideo(videoPath);
                 }
@@ -177,23 +216,7 @@ public class WorkoutActivity extends AppCompatActivity{
         return true;
     }
 
-    public void addDotsIndicator(int position){
-        mDots = new TextView[4];
-        mDotsLayout.removeAllViews();
 
-        for(int i=0; i<mDots.length; i++){
-            mDots[i] = new TextView(this);
-            mDots[i].setText(Html.fromHtml("&#8226;"));
-            mDots[i].setTextSize(35);
-            mDots[i].setTextColor(getResources().getColor(R.color.purple_200));
-
-            mDotsLayout.addView(mDots[i]);
-        }
-
-        if(mDots.length > 0){
-            mDots[position].setTextColor(getResources().getColor(R.color.purple_500));
-        }
-    }
 
     ViewPager.OnPageChangeListener viewListener = new ViewPager.OnPageChangeListener() {
         @Override
@@ -201,7 +224,6 @@ public class WorkoutActivity extends AppCompatActivity{
 
         @Override
         public void onPageSelected(int position) {
-            addDotsIndicator(position);
         }
 
         @Override
@@ -215,22 +237,6 @@ public class WorkoutActivity extends AppCompatActivity{
         MediaController mediaController = new MediaController(this);
         videoView.setMediaController(mediaController);
         mediaController.setAnchorView(videoView);
-    }
-
-    public void getDatabaseReference(String child){
-        String mail = InfoActivity.email.replace("@","").replace(".","");
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("users").child(mail).child("workout");
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    videoNum = snapshot.child(child).getValue().toString();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
     }
 
     class ListAdapter extends ArrayAdapter<String>{

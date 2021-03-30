@@ -101,14 +101,16 @@ public class SignInActivity extends AppCompatActivity {
 
     public void getDatabaseReferencePlan(){
         String mail = InfoActivity.email.replace("@","").replace(".","");
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("users").child(mail).child("workout");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("users").child(mail);
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.child("plan").exists()){
-                    InfoActivity.workoutPlan = snapshot.child("plan").getValue().toString();
-                }else{
+                if(snapshot.child("workout").child("plan").exists()){
+                    InfoActivity.workout_plan = snapshot.child("workout").child("plan").getValue().toString();
+                }
 
+                if (snapshot.child("diet").child("plan").exists()){
+                    InfoActivity.diet_plan = snapshot.child("diet").child("plan").getValue().toString();
                 }
             }
 
