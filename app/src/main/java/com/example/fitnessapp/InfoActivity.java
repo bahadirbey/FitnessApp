@@ -20,7 +20,6 @@ public class InfoActivity extends AppCompatActivity implements AdapterView.OnIte
     public static String email;
     public static String workout_plan;
     public static String diet_plan;
-    public static String cardio_plan;
 
     private Button save_btn;
 

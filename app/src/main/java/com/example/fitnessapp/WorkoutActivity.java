@@ -59,7 +59,6 @@ public class WorkoutActivity extends AppCompatActivity{
     VideoView videoView;
     String videoPath;
     String videoNum;
-    Button btnVideoSetter;
 
     ListView listView;
 
@@ -116,9 +115,6 @@ public class WorkoutActivity extends AppCompatActivity{
 
         navigationView.setCheckedItem(R.id.nav_workout);
 
-        Menu menu = navigationView.getMenu();
-        menu.findItem(R.id.nav_logout).setVisible(false);
-
         //Fragments
         List<Fragment> list = new ArrayList<>();
         list.add(new Workout_PageFragment1());
@@ -134,15 +130,11 @@ public class WorkoutActivity extends AppCompatActivity{
         pager.addOnPageChangeListener(viewListener);
 
         //Videos
-
-        btnVideoSetter = findViewById(R.id.btn_videosetter);
-
         videoNum = String.valueOf(R.raw.trailer);
         videoView = findViewById(R.id.video_view);
         videoPath = "android.resource://" + getPackageName() + "/" + videoNum;
 
         setVideo(videoPath);
-
         myPlanTitle = mainTitle;
         myPlanDes = subTitle;
 
@@ -163,8 +155,6 @@ public class WorkoutActivity extends AppCompatActivity{
             myPlanDes = maintainSubTitle;
             myPlanVideos = maintainVideoNums;
         }
-
-        Toast.makeText(WorkoutActivity.this,  "R.raw.video : " + R.raw.barbell_row, Toast.LENGTH_SHORT).show();
 
         listView = findViewById(R.id.list_item);
         ListAdapter adapter = new ListAdapter(this, myPlanTitle, myPlanDes);
@@ -206,6 +196,10 @@ public class WorkoutActivity extends AppCompatActivity{
                 Intent intent_cardio = new Intent(WorkoutActivity.this, CardioActivity.class);
                 startActivity(intent_cardio);
                 break;
+            case R.id.nav_plans:
+                Intent intent_plans = new Intent( WorkoutActivity.this, InfoActivity.class);
+                startActivity(intent_plans);
+                break;
             case R.id.nav_logout:
                 Intent intent_logout = new Intent(WorkoutActivity.this, SignInActivity.class);
                 startActivity(intent_logout);
@@ -215,8 +209,6 @@ public class WorkoutActivity extends AppCompatActivity{
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
-
-
 
     ViewPager.OnPageChangeListener viewListener = new ViewPager.OnPageChangeListener() {
         @Override

@@ -23,6 +23,10 @@
             android:title="Cardio"
             android:icon="@drawable/ic_cardio"/>
 
+        <item android:id="@+id/nav_plans"
+            android:title="Change Plans"
+            android:icon="@drawable/ic_plan"/>
+
         <item
             android:id="@+id/nav_logout"
             android:title="Logout"

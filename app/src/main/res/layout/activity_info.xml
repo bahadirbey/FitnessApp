@@ -6,17 +6,26 @@
     android:layout_height="match_parent"
     tools:context=".InfoActivity">
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="409dp"
+        android:layout_height="200dp"
+        android:src="@drawable/info"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <EditText
         android:id="@+id/name_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="108dp"
         android:layout_marginRight="20dp"
+        android:layout_marginTop="40dp"
         android:hint="Enter Your Name"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <EditText
         android:id="@+id/height_text"
@@ -65,20 +74,11 @@
         app:layout_constraintTop_toBottomOf="@+id/spinner_workout" />
 
 
-    <Spinner
-        android:id="@+id/spinner_cardio"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner_diet" />
-
     <Button
         android:id="@+id/save_btn"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="264dp"
+        android:layout_marginTop="150dp"
         android:text="@string/save"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"

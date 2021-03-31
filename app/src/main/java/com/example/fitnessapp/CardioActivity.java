@@ -1,6 +1,7 @@
 package com.example.fitnessapp;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
@@ -9,13 +10,23 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.example.fitnessapp.fragments.cardio.Cardio_PageFragment1;
 import com.example.fitnessapp.fragments.cardio.Cardio_PageFragment2;
@@ -33,9 +44,16 @@ public class CardioActivity extends AppCompatActivity {
 
     ViewPager pager;
     PagerAdapter pagerAdapter;
-    private TextView[] mDots;
 
-    LinearLayout mDotsLayout;
+    VideoView videoView;
+    String videoPath;
+    String videoNum;
+
+    ListView listView;
+
+    String cardioTitle[] = {"Kilo Vermek İsteyenler İçin", "Spora Yeni Başlayanlar İçin", "HIIT Kardiyo", "Evde Kardiyo İdmanı", "Evde Karın İdmanı"};
+    String cardioSubTitle[] = {"Evde Kardiyo Egzersizleri", "Ev Antrenmanı", "Ev İdmanı", "Fazlalık Kilolarından Kurtul", "5 Dakikada Karın Kaslarınızı Güçlendirin"};
+    int videoPlan[] = {R.raw.cardio_one, R.raw.cardio_two, R.raw.cardio_three, R.raw.cardio_four, R.raw.cardio_five};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +71,6 @@ public class CardioActivity extends AppCompatActivity {
 
         navigationView.setCheckedItem(R.id.nav_cardio);
 
-        Menu menu = navigationView.getMenu();
-        menu.findItem(R.id.nav_logout).setVisible(false);
-
         //Fragments
         List<Fragment> list = new ArrayList<>();
         list.add(new Cardio_PageFragment1());
@@ -68,10 +83,24 @@ public class CardioActivity extends AppCompatActivity {
 
         pager.setAdapter(pagerAdapter);
 
-        mDotsLayout = findViewById(R.id.dots_layout_cardio);
-        addDotsIndicator(0);
-
         pager.addOnPageChangeListener(viewListener);
+
+        videoNum = String.valueOf(R.raw.cardio_trailer);
+        videoView = findViewById(R.id.video_view_cardio);
+        videoPath = "android.resource://" + getPackageName() + "/" + videoNum;
+        setVideo(videoPath);
+
+        listView = findViewById(R.id.list_cardio_item);
+        ListAdapter adapter = new ListAdapter(this, cardioTitle, cardioSubTitle);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    videoNum = String.valueOf(videoPlan[position]);
+                    videoPath = "android.resource://" + getPackageName() + "/" + videoNum;
+                    setVideo(videoPath);
+            }
+        });
     }
 
     public void onBackPressed(){
@@ -99,6 +128,10 @@ public class CardioActivity extends AppCompatActivity {
                 break;
             case R.id.nav_cardio:
                 break;
+            case R.id.nav_plans:
+                Intent intent_plans = new Intent( CardioActivity.this, InfoActivity.class);
+                startActivity(intent_plans);
+                break;
             case R.id.nav_logout:
                 Intent intent_logout = new Intent(CardioActivity.this, SignInActivity.class);
                 startActivity(intent_logout);
@@ -109,34 +142,52 @@ public class CardioActivity extends AppCompatActivity {
         return true;
     }
 
-    public void addDotsIndicator(int position){
-        mDots = new TextView[4];
-        mDotsLayout.removeAllViews();
-
-        for(int i=0; i<mDots.length; i++){
-            mDots[i] = new TextView(this);
-            mDots[i].setText(Html.fromHtml("&#8226;"));
-            mDots[i].setTextSize(35);
-            mDots[i].setTextColor(getResources().getColor(R.color.purple_200));
-
-            mDotsLayout.addView(mDots[i]);
-        }
-
-        if(mDots.length > 0){
-            mDots[position].setTextColor(getResources().getColor(R.color.purple_500));
-        }
-    }
 
     ViewPager.OnPageChangeListener viewListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
 
         @Override
-        public void onPageSelected(int position) {
-            addDotsIndicator(position);
-        }
+        public void onPageSelected(int position) {}
 
         @Override
         public void onPageScrollStateChanged(int state) {}
     };
+
+    public void setVideo(String videoPath){
+        Uri uri = Uri.parse(videoPath);
+        videoView.setVideoURI(uri);
+
+        MediaController mediaController = new MediaController(this);
+        videoView.setMediaController(mediaController);
+        mediaController.setAnchorView(videoView);
+    }
+
+    class ListAdapter extends ArrayAdapter<String> {
+
+        Context context;
+        String rTitle[];
+        String rDes[];
+
+        ListAdapter(Context context, String title[], String des[]){
+            super(context, R.layout.row, R.id.mainText, title);
+            this.context = context;
+            this.rTitle = title;
+            this.rDes = des;
+        }
+
+        @NonNull
+        @Override
+        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View view = inflater.inflate(R.layout.row, parent, false);
+            TextView title = view.findViewById(R.id.mainText);
+            TextView des = view.findViewById(R.id.subText);
+
+            title.setText(rTitle[position]);
+            des.setText(rDes[position]);
+
+            return view;
+        }
+    }
 }

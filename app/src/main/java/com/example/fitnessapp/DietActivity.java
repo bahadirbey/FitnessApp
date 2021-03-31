@@ -110,9 +110,6 @@ public class DietActivity extends AppCompatActivity {
 
         navigationView.setCheckedItem(R.id.nav_diet);
 
-        Menu menu = navigationView.getMenu();
-        menu.findItem(R.id.nav_logout).setVisible(false);
-
         //Fragments
         List<Fragment> list = new ArrayList<>();
         list.add(new Diet_PageFragment1());
@@ -170,6 +167,10 @@ public class DietActivity extends AppCompatActivity {
             case R.id.nav_cardio:
                 Intent intent_cardio = new Intent(DietActivity.this, CardioActivity.class);
                 startActivity(intent_cardio);
+                break;
+            case R.id.nav_plans:
+                Intent intent_plans = new Intent( DietActivity.this, InfoActivity.class);
+                startActivity(intent_plans);
                 break;
             case R.id.nav_logout:
                 Intent intent_logout = new Intent(DietActivity.this, SignInActivity.class);

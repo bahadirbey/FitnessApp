@@ -68,9 +68,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         navigationView.setCheckedItem(R.id.nav_home);
 
-        Menu menu = navigationView.getMenu();
-        menu.findItem(R.id.nav_logout).setVisible(false);
-
         //Fragments
         List<Fragment> list = new ArrayList<>();
         list.add(new PageFragment1());
@@ -113,6 +110,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_cardio:
                 Intent intent_cardio = new Intent(HomeActivity.this, CardioActivity.class);
                 startActivity(intent_cardio);
+                break;
+            case R.id.nav_plans:
+                Intent intent_plans = new Intent( HomeActivity.this, InfoActivity.class);
+                startActivity(intent_plans);
                 break;
             case R.id.nav_logout:
                 Intent intent_logout = new Intent(HomeActivity.this, SignInActivity.class);
