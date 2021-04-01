@@ -11,7 +11,7 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Workout_All_Exercises"
+        android:text="Her set arasında 45 saniye kadar dinlenin!"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         app:layout_constraintBottom_toBottomOf="parent"
